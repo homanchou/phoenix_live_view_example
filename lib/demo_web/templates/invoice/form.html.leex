@@ -1,0 +1,56 @@
+<%= f = form_for @changeset, "#", [phx_change: :change, phx_submit: :save] %>
+<%= if @changeset.valid? == false do %>
+  <div class="alert alert-danger">
+    <p>Oops, something went wrong! Please check the errors below.</p>
+  </div>
+  <%= if @changeset.errors != [] do %>
+    <div class="alert alert-warning">
+      <%= error_tag f, :workdays %>
+    </div>
+  <% end %>
+<% end %>
+<table>
+  <tr>
+    <td>Date</td>
+    <td>Period1</td>
+    <td>Period2</td>
+    <td>Hours</td>
+    <td></td>
+  </tr>
+  <%= inputs_for f, :workdays, fn wd -> %>
+  <tr>
+    <td>
+      <%= date_select wd, :date, builder: fn b -> %>
+      <%= b.(:month, []) %> <%= b.(:day, []) %> <%= b.(:year, [options: 2018..2020]) %>
+    <% end %>
+  </td>
+  <td>
+    <%= select wd, :period1_start, time_options(), value: form_to_time(wd, :period1_start) %>
+    <%= error_tag wd, :period1_start %> -
+    <%= select wd, :period1_end, time_options(), value: form_to_time(wd, :period1_end) %>
+    <%= error_tag wd, :period1_end %>
+  </td>
+  <td>
+    <%= select wd, :period2_start, optional_time_options(), value: form_to_time(wd, :period2_start) %>
+    <%= error_tag wd, :period2_start %> -
+    <%= select wd, :period2_end, optional_time_options(), value: form_to_time(wd, :period2_end) %>
+    <%= error_tag wd, :period2_end %>
+  </td>
+  <td>
+    <%= Ecto.Changeset.get_field(wd.source, :hours) %>
+  </td>
+  <td><button type="button" phx-click="delete_workday" phx-value-workday_id="<%= wd.id %>" class="alert-danger">🗑</button></td>
+</tr>
+<% end %>
+</table>
+<div>
+  Hours: <%= Ecto.Changeset.get_field(@changeset, :hours) %>
+</div>
+<div>
+  Total: <%= Ecto.Changeset.get_field(@changeset, :total) %>
+</div>
+<button type="button" phx-click="add_workday">Add Workday</button>
+<div>
+  <%= submit "Save" %>
+</div>
+</form>

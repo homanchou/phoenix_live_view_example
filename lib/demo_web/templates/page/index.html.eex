@@ -2,11 +2,11 @@
   <h2><%= gettext "Welcome to %{name}!", name: "Phoenix LiveView" %></h2>
   <%= live_render(@conn, DemoWeb.WeatherLive) %>
 </section>
-
 <section class="row">
   <article class="column">
     <h4>LiveView Examples</h4>
     <ul>
+      <li><%= link "Invoice", to: Routes.invoice_path(@conn, :index) %></li>
       <li><%= link "Thermostat", to: Routes.live_path(@conn, DemoWeb.ThermostatLive) %></li>
       <li><%= link "Snake", to: Routes.page_path(@conn, :snake) %></li>
       <li><%= link "Search with Autocomplete", to: Routes.live_path(@conn, DemoWeb.SearchLive) %></li>
